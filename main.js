@@ -2,40 +2,28 @@
 // з доменом gmail.com (Хеш то що з ліва записувати не потрібно)
 
 const fs = require('node:fs');
+const afs = require('node:fs/promises');
 const path = require('node:path');
-const readline = require('node:readline');
+const readline = require('node:readline/promises');
 
-// Шлях до вхідного файлу
-const inputFile = path.join(__dirname, 'emails.txt');
-const outputFile = path.join(__dirname, 'email.txt');
+const start = async () => {
+    const sourceFilePath = path.join(process.cwd(), 'emails.txt');
+    const targetFilePath = path.join(process.cwd(), 'gmail.txt');
 
-const rl = readline.createInterface({
-    input: fs.createReadStream(inputFile),
-    output: process.stdout,
-    terminal: false
-});
-
-const gmailEmails = [];
-
-rl.on('line', (line) => {
-    const parts = line.split(/\s+/);
-    if (parts.length > 1) {
-        const email = parts[1];
-        if (email.endsWith('@gmail.com')) {
-            gmailEmails.push(email);
-        }
+    const fileStream = fs.createReadStream(sourceFilePath, 'utf-8');
+    const rl = readline.createInterface({input: fileStream});
+    try{
+        for await (const line of rl) {
+            const email = line.split('\t').splice(-1)[0];
+            const domainName = email.split('@').splice(-1)[0];
+            if (domainName === 'gmail.com') {
+            await afs.appendFile(targetFilePath, `${email}\n`);
+        }}
+    } finally {
+        await rl.close();
     }
-});
+};
 
-rl.on('close', () => {
-    fs.writeFile(outputFile, gmailEmails.join('\n'), 'utf8', (err) => {
-        if (err) {
-            console.error(`Помилка запису файлу ${outputFile}:`, err);
-        } else {
-            console.log(`Файл ${outputFile} успішно створено!`);
-        }
-    });
-});
-
+start();
 
 
