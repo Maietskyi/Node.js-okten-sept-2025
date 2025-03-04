@@ -1,6 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline');
+// Є ось такий файл... ваша задача записати в новий файл тільки email.txt
+// з доменом gmail.com (Хеш то що з ліва записувати не потрібно)
+
+const fs = require('node:fs');
+const path = require('node:path');
+const readline = require('node:readline');
 
 // Шлях до вхідного файлу
 const inputFile = path.join(__dirname, 'emails.txt');
