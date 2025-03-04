@@ -12,13 +12,19 @@ const start = async () => {
 
     const fileStream = fs.createReadStream(sourceFilePath, 'utf-8');
     const rl = readline.createInterface({input: fileStream});
-    try{
+    try {
         for await (const line of rl) {
             const email = line.split('\t').splice(-1)[0];
-            const domainName = email.split('@').splice(-1)[0];
-            if (domainName === 'gmail.com') {
-            await afs.appendFile(targetFilePath, `${email}\n`);
-        }}
+            const splitEmail = email.split('@');
+            if (splitEmail.length !== 2) {
+                continue;
+            }
+
+            const domainName = splitEmail.splice(-1)[0];
+
+            const targetFileName = domainName + '.txt';
+            await afs.appendFile(`emails/${targetFileName}`,  `${email}\n`);
+        }
     } finally {
         await rl.close();
     }
