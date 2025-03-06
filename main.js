@@ -46,25 +46,27 @@ app.post('/users', async (req, res) => {
     res.json(data);
 })
 
-// app.patch('/users/:id', async (req, res) => {
-//     const id = req.params.id;
-//     const data = await userService.update(id);
-//     res.json(data);
-// })
-
 app.put('/users/:id', async (req, res) => {
     const id = req.params.id;
-    const data = await userService.update(id);
+    const updatedUser = req.body;
+    const data = await userService.updateById(id, updatedUser);
     res.json(data);
-})
+});
+
+app.patch('/users/:id', async (req, res) => {
+    const id = req.params.id;
+    const partialUpdate = req.body;
+    const data = await userService.partialUpdateById(id, partialUpdate);
+    res.json(data);
+});
 
 app.delete('/users/:id', async (req, res) => {
     const id = req.params.id;
-    const data = await userService.delete(id);
-    res.json(data);
-})
+    const data = await userService.deleteById(id);
+    res.json({ message: 'User deleted successfully', data });
+});
 
-app.listen(5000, () => {
+app.listen(5000, ()=>{
     console.log('Server running on port 5000...');
 });
 
@@ -72,5 +74,5 @@ app.listen(5000, () => {
 // CRUD
 // Create - створення
 // Read/Retrive - читання всіх/читання по айді
-// Update - aпдейт по айді
+// Update - фпдейт по айді
 // Delete/Destroy - делейт по айді
