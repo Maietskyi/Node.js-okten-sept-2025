@@ -10,12 +10,15 @@ class UserService {
     async getById(id) {
         return await userRepository.getById(id);
     };
-    async update(id) {
-        return await userRepository.updateById(id);
+    async updateById(id, partialUpdate) {
+        return await userRepository.updateById(id, partialUpdate);
     };
-    async delete(id) {
+    async partialUpdateById(id, partialUpdate) {
+        return await userRepository.partialUpdateById(id, partialUpdate);
+    };
+    async deleteById(id) {
         return await userRepository.deleteById(id);
-    }
+    };
 }
 
 const userService  = new UserService();
