@@ -19,8 +19,29 @@ class UserRepository {
     users.push(newUser);
     await write(users);
     return newUser;
-    }
+    };
+
     async getById(id){
+        const users = await read();
+        const index = users.findIndex(user => user.id === Number(id));
+        return users[index]
+    }
+
+    // async updateById(id){
+    //     const users = await read();
+    //     const index = users.findIndex(user => user.id === Number(id));
+    //     const user = users[index];
+    //     const updateUser = {
+    //         name: user.name.body? user.name.body: user.name,
+    //         surname: user.surname.body? user.surname.body: user.surname,
+    //         age: user.age.body? user.age.body: user.age
+    //     };
+    //     users.push(updateUser);
+    //     await write(users);
+    //     return updateUser;
+    // }
+
+    async deleteById(id){
         const users = await read();
         const index = users.findIndex(user => user.id === Number(id));
         return users[index]
