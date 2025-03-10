@@ -47,24 +47,17 @@ app.post('/users', async (req, res) => {
 })
 
 app.put('/users/:id', async (req, res) => {
-    const id = req.params.id;
-    const updatedUser = req.body;
-    const data = await userService.updateById(id, updatedUser);
+    const user = req.body;
+    const {id} = req.params;
+    const data = await userService.updateById(id, user);
     res.json(data);
-});
-
-app.patch('/users/:id', async (req, res) => {
-    const id = req.params.id;
-    const partialUpdate = req.body;
-    const data = await userService.partialUpdateById(id, partialUpdate);
-    res.json(data);
-});
+})
 
 app.delete('/users/:id', async (req, res) => {
-    const id = req.params.id;
-    const data = await userService.deleteById(id);
-    res.json({ message: 'User deleted successfully', data });
-});
+    const {id} = req.params;
+    await userService.deleteById(id);
+    res.end();
+})
 
 app.listen(5000, ()=>{
     console.log('Server running on port 5000...');

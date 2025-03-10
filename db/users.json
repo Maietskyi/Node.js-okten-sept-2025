@@ -6,15 +6,21 @@
     "age": "20"
   },
   {
-    "id": 2,
-    "name": "Misha",
-    "surname": "Maietskyi",
+    "name": "Maria",
+    "surname": "Maietska",
+    "age": "22",
+    "id": 3
+  },
+  {
+    "id": 4,
+    "name": "Maria",
+    "surname": "Maietska",
     "age": "22"
   },
   {
-    "id": 3,
-    "name": "Роман",
-    "surname": "Maietskyi",
-    "age": "18"
+    "id": 5,
+    "name": "Maria",
+    "surname": "Maietska",
+    "age": "22"
   }
 ]

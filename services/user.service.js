@@ -10,14 +10,11 @@ class UserService {
     async getById(id) {
         return await userRepository.getById(id);
     };
-    async updateById(id, partialUpdate) {
-        return await userRepository.updateById(id, partialUpdate);
-    };
-    async partialUpdateById(id, partialUpdate) {
-        return await userRepository.partialUpdateById(id, partialUpdate);
+    async updateById(id, user) {
+        return await userRepository.updateById(id, user);
     };
     async deleteById(id) {
-        return await userRepository.deleteById(id);
+        await userRepository.deleteById(id);
     };
 }
 

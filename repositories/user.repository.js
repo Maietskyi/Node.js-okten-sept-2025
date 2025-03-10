@@ -27,31 +27,19 @@ class UserRepository {
         return users[index]
     }
 
-    async updateById(id, updatedUser) {
+    async updateById(id, user) {
         const users = await read();
         const index = users.findIndex(user => user.id === Number(id));
-        if (index === -1) return null;
-        users[index] = { id: Number(id), ...updatedUser };
+        user.id = +id;
+        users[index] = user;
         await write(users);
-        return users[index];
-    }
-
-    async partialUpdateById(id, partialUpdate) {
-        const users = await read();
-        const index = users.findIndex(user => user.id === Number(id));
-        if (index === -1) return null;
-        users[index] = { ...users[index], ...partialUpdate };
-        await write(users);
-        return users[index];
+        return user;
     }
 
     async deleteById(id) {
         const users = await read();
         const index = users.findIndex(user => user.id === Number(id));
-        if (index === -1) return null;
-        const deletedUser = users.splice(index, 1)[0];
-        await write(users);
-        return deletedUser;
+        users.splice(index, 1);
     }
 }
 
