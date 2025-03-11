@@ -1,7 +1,7 @@
-import express, {Request, Response} from "express";
+import express from "express";
 import * as mongoose from "mongoose";
-import {userService} from "./services/user.service";
-
+import {config} from "./configs/config";
+import {apiRouter} from "./routers/api.router";
 
 const app = express();
 app.use(express.json());
@@ -11,9 +11,9 @@ const dbConnection = async (): Promise<void> => {
     let dbCon = false;
     while (!dbCon) {
         try {
-            console.log('Connecting to db');
-            await mongoose.connect('mongodb+srv://Maietskyi:admin@cluster0.8nrw3.mongodb.net/nodejs-express-db');
-            dbCon = true;
+            console.log('Connecting to DB...');
+            await mongoose.connect(config.MONGODB_URI);
+            dbCon = true
             console.log('Database available!!!');
         } catch (e) {
             console.log('Database unavailable, wait 3 seconds');
@@ -22,19 +22,17 @@ const dbConnection = async (): Promise<void> => {
     }
 };
 
-app.get("/", async (req: Request, res: Response) => {
-    const data = await userService.getAll();
-    res.json(data)
-})
+app.use("/", apiRouter);
 
 const start = async (): Promise<void> => {
     try {
         await dbConnection();
-        app.listen(2222, (): void => {
-            'Server listening on port 222'
+        app.listen(config.PORT,() : void => {
+            console.log(`Server listening on port ${config.PORT}`);
         });
     } catch (e) {
         console.error(e);
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 };
 
