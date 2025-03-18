@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-redeclare
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { userService } from "../services/user.service";
 import { IUserDTO } from "../interfaces/user.interface";
 import { StatusCodeEnum } from "../enums/status-codes";
@@ -10,11 +10,16 @@ class UserController {
         res.status(StatusCodeEnum.OK).json(data);
     }
 
-    public async create(req: Request, res: Response) {
-        const user = req.body as IUserDTO;
-        const data = await userService.create(user);
-        res.status(StatusCodeEnum.CREATED).status(StatusCodeEnum.OK).json(data);
+    public async create(req: Request, res: Response, next: NextFunction) {
+        try {
+            const user = req.body as IUserDTO;
+            const data = await userService.create(user);
+            res.status(StatusCodeEnum.CREATED).status(StatusCodeEnum.OK).json(data);
+        } catch (e) {
+            next(e);
+        }
     }
+
 
     public async getById(req: Request, res: Response) {
         const { id } = req.params;
