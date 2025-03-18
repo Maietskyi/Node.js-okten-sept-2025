@@ -22,16 +22,20 @@ class UserController {
 
 
     public async getById(req: Request, res: Response) {
-        const { id } = req.params;
-        const data = await userService.getById(id);
-        res.status(StatusCodeEnum.OK).json(data);
+            const { id } = req.params;
+            const data = await userService.getById(id);
+            res.status(StatusCodeEnum.OK).json(data);
     }
 
-    public async updateById(req: Request, res: Response) {
+    public async updateById(req: Request, res: Response, next: NextFunction) {
+        try {
         const { id } = req.params;
         const user = req.body as IUserDTO;
         const data = await userService.updateById(id, user);
         res.status(StatusCodeEnum.OK).json(data);
+        } catch (e) {
+            next(e);
+        }
     }
 
     public async deleteById(req: Request, res: Response) {

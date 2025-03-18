@@ -15,7 +15,11 @@ router.post(
 
 router.get("/:id", userController.getById);
 
-router.put("/:id", userController.updateById);
+router.put(
+    "/:id",
+    commonMiddleware.validateBody(UserValidator.update),
+    userController.updateById
+);
 
 router.delete("/:id", userController.deleteById);
 

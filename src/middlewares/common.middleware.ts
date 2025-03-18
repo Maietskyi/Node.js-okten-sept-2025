@@ -11,6 +11,7 @@ class CommonMiddleware {
                 if (!isObjectIdOrHexString(id)) {
                     throw new ApiError(`Invalide Id [${key}]`, 400);
                 }
+                next();
             } catch (e) {
                 next(new ApiError(e.deletes[0].message, 400));
             }
@@ -23,7 +24,8 @@ class CommonMiddleware {
                 req.body = await validator.validateAsync(req.body);
                 next()
             } catch (e) {
-                next(new ApiError(e.deletes[0].message, 400));
+                const errorMessage = e.details?.[0]?.message || "Validation error";
+                next(new ApiError(errorMessage, 400));
             }
         };
     }
