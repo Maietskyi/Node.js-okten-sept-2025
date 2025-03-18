@@ -8,6 +8,7 @@ class CommonMiddleware {
         return (req: Request, res: Response, next: NextFunction): any => {
             try {
                 const { id } = req.params;
+
                 if (!isObjectIdOrHexString(id)) {
                     throw new ApiError(`Invalide Id [${key}]`, 400);
                 }
