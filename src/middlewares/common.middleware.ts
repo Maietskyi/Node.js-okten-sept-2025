@@ -7,9 +7,9 @@ class CommonMiddleware {
     public isIdValidate(key: string) {
         return (req: Request, res: Response, next: NextFunction): any => {
             try {
-                const { id } = req.params;
+                const id = req.params[key];
                 if (!isObjectIdOrHexString(id)) {
-                    throw new ApiError(`Invalide Id [${key}]`, 400);
+                    throw new ApiError(`${key}: ${id} invalid id`, 400);
                 }
                 next();
             } catch (e) {
