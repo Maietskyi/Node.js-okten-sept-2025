@@ -14,6 +14,7 @@ class CommonMiddleware {
                 next();
             } catch (e) {
                 next(new ApiError(e.deletes[0].message, 400));
+                // next(e);
             }
         };
     }
@@ -26,6 +27,7 @@ class CommonMiddleware {
             } catch (e) {
                 const errorMessage = e.details?.[0]?.message || "Validation error";
                 next(new ApiError(errorMessage, 400));
+                // next(new ApiError(e.details[0].message, 400));
             }
         };
     }
