@@ -21,7 +21,7 @@ class AuthService {
         return { user: newUser, tokens };
     }
 
-    public async signIr(dto: any): Promise<{ user: IUser, tokens: ITokenPair }> {
+    public async signIn(dto: any): Promise<{ user: IUser, tokens: ITokenPair }> {
         const user = await userRepository.getByEmail(dto.email);
         const isValidPassword = await passwordService.comparePassword(dto.password, user.password);
         if (!isValidPassword) {
@@ -31,7 +31,7 @@ class AuthService {
             userId: user._id,
             role: user.role,
         });
-        await tokenRepository.create({ ...tokens, userId: user._id });
+        await tokenRepository.create({ ...tokens, _userId: user._id });
         return { user, tokens };
     }
 }
