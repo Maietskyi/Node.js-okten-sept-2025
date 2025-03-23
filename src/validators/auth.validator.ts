@@ -4,6 +4,6 @@ export class AuthValidator {
     private static refresh = joi.string().trim();
 
     public static refreshToken = joi.object({
-        refresh: this.refresh.required(),
+        refreshToken: this.refresh.required(),
     });
 }

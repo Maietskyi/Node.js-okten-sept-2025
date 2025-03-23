@@ -49,7 +49,6 @@ class AuthMiddleware {
             if (!refreshToken) {
                 throw new ApiError("No refresh token provided", StatusCodeEnum.FORBIDDEN);
             }
-
             const tokenPayload = tokenService.verifyToken(refreshToken, "refresh");
             const isTokenExists = await tokenService.isTokenExists(refreshToken, "refreshToken");
 
