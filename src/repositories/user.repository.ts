@@ -13,14 +13,25 @@ class UserRepository {
     public getById(userId: string): Promise<IUser> {
         return User.findById(userId);
     }
+
     public updateById(userId: string, user: IUserUpdateDTO): Promise<IUser> {
         return User.findByIdAndUpdate(userId, user);
     }
+
     public deleteById(userId: string): Promise<IUser> {
         return User.findByIdAndDelete(userId);
     }
+
     public getByEmail(email: string): Promise<IUser> {
-        return User.findOne({ email })
+        return User.findOne({ email });
+    }
+
+    public blockUser(userId: string): Promise<IUser> {
+        return User.findByIdAndUpdate(userId, { isActive: false }, { new: true });
+    }
+
+    public unBlockUser(userId: string): Promise<IUser> {
+        return User.findByIdAndUpdate(userId, { isActive: true }, { new: true });
     }
 }
 

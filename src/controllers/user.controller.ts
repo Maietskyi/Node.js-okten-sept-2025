@@ -1,8 +1,10 @@
 // eslint-disable-next-line no-redeclare
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { userService } from "../services/user.service";
 import { StatusCodeEnum } from "../enums/status-codes";
 import { IUserUpdateDTO } from "../interfaces/user.interface";
+import { ITokenPayload } from "../interfaces/token.interface";
+import { ApiError } from "../errors/api.error";
 
 class UserController {
     public async getAll(req: Request, res: Response, next: NextFunction) {
@@ -40,6 +42,42 @@ class UserController {
             const { id } = req.params;
             await userService.deleteById(id);
             res.status(StatusCodeEnum.NO_CONTENT).end();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async blockUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { userId } = req.params;
+            const { userId: myId } = req.res.locals.tokenPayload as ITokenPayload;
+
+            if (userId === myId) {
+                throw new ApiError("Not permitted", StatusCodeEnum.FORBIDDEN);
+            }
+
+            const data = await userService.blockUser(userId);
+
+            res.status(StatusCodeEnum.OK).json(data);
+
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async unBlockUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { userId } = req.params;
+            const { userId: myId } = req.res.locals.tokenPayload as ITokenPayload;
+
+            if (userId === myId) {
+                throw new ApiError("Not permitted", StatusCodeEnum.FORBIDDEN);
+            }
+
+            const data = await userService.unBlockUser(userId);
+
+            res.status(StatusCodeEnum.OK).json(data);
+
         } catch (e) {
             next(e);
         }

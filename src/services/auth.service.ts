@@ -29,6 +29,9 @@ class AuthService {
             throw new ApiError("Email or password invalid", StatusCodeEnum.UNAUTHORIZED);
         }
         const isValidPassword = await passwordService.comparePassword(dto.password, user.password);
+        if (!user.isActive) {
+            throw new ApiError("Invalid active user", StatusCodeEnum.FORBIDDEN);
+        }
         if (!isValidPassword) {
             throw new ApiError("Invalid email or password", StatusCodeEnum.UNAUTHORIZED);
         }
