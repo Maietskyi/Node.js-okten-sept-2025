@@ -49,7 +49,7 @@ class UserController {
 
     public async blockUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const { userId } = req.params;
+            const { id: userId } = req.params;
             const { userId: myId } = req.res.locals.tokenPayload as ITokenPayload;
 
             if (userId === myId) {
@@ -67,7 +67,7 @@ class UserController {
 
     public async unBlockUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const { userId } = req.params;
+            const { id: userId } = req.params;
             const { userId: myId } = req.res.locals.tokenPayload as ITokenPayload;
 
             if (userId === myId) {
