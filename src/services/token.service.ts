@@ -42,8 +42,8 @@ class TokenService {
         }
     }
 
-    public async isTokenExists(accessToken: string): Promise<boolean> {
-        const iTokenPromise = await tokenRepository.findByParams({ accessToken });
+    public async isTokenExists(token: string, type: "accessToken" | "refreshToken"): Promise<boolean> {
+        const iTokenPromise = await tokenRepository.findByParams({ [type]: token });
         return !!iTokenPromise;
     }
 }
