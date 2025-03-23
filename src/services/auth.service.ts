@@ -7,6 +7,7 @@ import { tokenService } from "./token.service";
 import { tokenRepository } from "../repositories/token.repository";
 import { ApiError } from "../errors/api.error";
 import { StatusCodeEnum } from "../enums/status-codes";
+import { IAuth } from "../interfaces/auth.interface";
 
 class AuthService {
     public async signUp(user: IUserCreateDTO): Promise<{ user: IUser, tokens: ITokenPair }> {
@@ -21,8 +22,12 @@ class AuthService {
         return { user: newUser, tokens };
     }
 
-    public async signIn(dto: any): Promise<{ user: IUser, tokens: ITokenPair }> {
+    public async signIn(dto: IAuth): Promise<{ user: IUser, tokens: ITokenPair }> {
         const user = await userRepository.getByEmail(dto.email);
+
+        if (!user) {
+            throw new ApiError("Email or password invalid", StatusCodeEnum.UNAUTHORIZED);
+        }
         const isValidPassword = await passwordService.comparePassword(dto.password, user.password);
         if (!isValidPassword) {
             throw new ApiError("Invalid email or password", StatusCodeEnum.UNAUTHORIZED);

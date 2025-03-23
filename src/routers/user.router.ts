@@ -2,16 +2,11 @@ import { Router } from "express";
 import { userController } from "../controllers/user.controller";
 import { commonMiddleware } from "../middlewares/common.middleware";
 import { UserValidator } from "../validators/user.validator";
+import { authMiddleware } from "../middlewares/auth.midleware";
 
 const router = Router();
 
 router.get("/", userController.getAll);
-
-router.post(
-    "/",
-    commonMiddleware.validateBody(UserValidator.create),
-    userController.create,
-);
 
 router.get(
     "/:id",
@@ -21,6 +16,7 @@ router.get(
 
 router.put(
     "/:id",
+    authMiddleware.checkAccessToken,
     commonMiddleware.isIdValidate("id"),
     commonMiddleware.validateBody(UserValidator.update),
     userController.updateById,
@@ -28,6 +24,7 @@ router.put(
 
 router.delete(
     "/:id",
+    authMiddleware.checkAccessToken,
     commonMiddleware.isIdValidate("id"),
     userController.deleteById,
 );

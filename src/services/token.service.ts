@@ -3,6 +3,7 @@ import { ITokenPair, ITokenPayload } from "../interfaces/token.interface";
 import { config } from "../configs/config";
 import { ApiError } from "../errors/api.error";
 import { StatusCodeEnum } from "../enums/status-codes";
+import { tokenRepository } from "../repositories/token.repository";
 
 class TokenService {
     public generateTokens(payload: ITokenPayload): ITokenPair {
@@ -28,11 +29,11 @@ class TokenService {
                 case "refresh":
                     secret = config.JWT_REFRESH_SECRET;
                     break;
-                    default:
-                        throw new ApiError(
-                            "Invalid token type",
-                            StatusCodeEnum.BED_REQUEST
-                        );
+                default:
+                    throw new ApiError(
+                        "Invalid token type",
+                        StatusCodeEnum.BED_REQUEST,
+                    );
 
             }
             return jwt.verify(token, secret) as ITokenPayload;
@@ -40,5 +41,11 @@ class TokenService {
             throw new ApiError("Invalid token", StatusCodeEnum.UNAUTHORIZED);
         }
     }
+
+    public async isTokenExists(accessToken: string): Promise<boolean> {
+        const iTokenPromise = await tokenRepository.findByParams({ accessToken });
+        return !!iTokenPromise;
+    }
 }
+
 export const tokenService = new TokenService();
