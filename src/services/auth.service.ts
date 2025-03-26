@@ -9,6 +9,7 @@ import { ApiError } from "../errors/api.error";
 import { StatusCodeEnum } from "../enums/status-codes";
 import { IAuth } from "../interfaces/auth.interface";
 import { emailService } from "./email.service";
+import { templatesConstants } from "../constants/templates.constants";
 
 class AuthService {
     public async signUp(user: IUserCreateDTO): Promise<{ user: IUser, tokens: ITokenPair }> {
@@ -20,7 +21,12 @@ class AuthService {
             role: newUser.role,
         });
         await tokenRepository.create({ ...tokens, _userId: newUser._id });
-        await emailService.sendEmail();
+        await emailService.sendEmail(
+            newUser.email,
+            "Welcome",
+            templatesConstants.WELCOME,
+            { name: newUser.name },
+        );
         return { user: newUser, tokens };
     }
 

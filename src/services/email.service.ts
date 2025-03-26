@@ -24,16 +24,24 @@ class EmailService {
         );
         const layoutTemplate = handlebars.compile(layoutSource);
         const templateSource = await fs.readFile(
-            path.join(process.cwd(), "src", "templates", `${templateName}.hbs`, "utf8"),
+            path.join(process.cwd(), "src", "templates", `${templateName}.hbs`), "utf8",
         );
         const childTemplate = handlebars.compile(templateSource);
+        const childHtml = childTemplate(context);
+        return layoutTemplate({ body: childHtml });
     }
 
-    public async sendEmail(): Promise<void> {
+    public async sendEmail(
+        to: string,
+        subject: string,
+        templateName: string,
+        context: Record<string, any>,
+    ): Promise<void> {
         await this.transporter.sendMail({
-            to: "mykhailo.maietskyi.meoek.2024@lpnu.ua",
-            subject: "Hello World!",
-            text: "Hello from nodemailer",
+            to,
+            subject,
+            html: await this._renderTemplate(templateName, context),
+            // text: "Hello from nodemailer",
         });
     }
 }
