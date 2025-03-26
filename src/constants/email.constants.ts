@@ -1,3 +1,3 @@
-export const templatesConstants = {
+export const emailConstants = {
     WELCOME: "welcome"
 }
