@@ -10,6 +10,7 @@ import { StatusCodeEnum } from "../enums/status-codes";
 import { IAuth } from "../interfaces/auth.interface";
 import { emailService } from "./email.service";
 import { emailConstants } from "../constants/email.constants";
+import { EmailEnum } from "../enums/email.enum";
 
 class AuthService {
     public async signUp(user: IUserCreateDTO): Promise<{ user: IUser, tokens: ITokenPair }> {
@@ -23,8 +24,7 @@ class AuthService {
         await tokenRepository.create({ ...tokens, _userId: newUser._id });
         await emailService.sendEmail(
             newUser.email,
-            "Welcome",
-            emailConstants.WELCOME,
+            emailConstants[EmailEnum.WELCOME],
             { name: newUser.name },
         );
         return { user: newUser, tokens };
@@ -38,7 +38,7 @@ class AuthService {
         }
         const isValidPassword = await passwordService.comparePassword(dto.password, user.password);
         if (!user.isActive) {
-            throw new ApiError("Invalid active user", StatusCodeEnum.FORBIDDEN);
+            throw new ApiError("Account is not active", StatusCodeEnum.FORBIDDEN);
         }
         if (!isValidPassword) {
             throw new ApiError("Invalid email or password", StatusCodeEnum.UNAUTHORIZED);
