@@ -27,4 +27,6 @@ router.get(
     authController.me,
 );
 
+router.patch("/activate/:token", authController.activate);
+
 export const authRouter = router;

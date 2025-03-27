@@ -1,4 +1,4 @@
-import { IUser, IUserCreateDTO, IUserUpdateDTO } from "../interfaces/user.interface";
+import { IUser, IUserCreateDTO } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
 import { ApiError } from "../errors/api.error";
 import { StatusCodeEnum } from "../enums/status-codes";
@@ -20,7 +20,7 @@ class UserService {
         return user;
     }
 
-    public async updateById(userId: string, user: IUserUpdateDTO): Promise<IUser> {
+    public async updateById(userId: string, user: Partial<IUser>): Promise<IUser> {
         const data = await userRepository.getById(userId);
         if (!data) {
             throw new ApiError("User not found", StatusCodeEnum.NOT_FOUND);

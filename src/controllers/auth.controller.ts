@@ -51,6 +51,16 @@ class AuthController {
             next(e);
         }
     }
+
+    public async activate(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { token } = req.params;
+            const user = await authService.activate(token);
+            res.status(StatusCodeEnum.OK).json(user);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 export const authController = new AuthController();
