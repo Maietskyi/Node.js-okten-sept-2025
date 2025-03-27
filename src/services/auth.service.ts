@@ -63,7 +63,7 @@ class AuthService {
         return await userService.updateById(userId, { isActive: true });
     }
 
-    public async recoveryPasswordRequest(user:IUser, ):Promise<void>{
+    public async recoveryPasswordRequest(user: IUser): Promise<void> {
         const token = tokenService.generateActionToken({
             userId: user._id,
             role: user.role,
@@ -74,6 +74,13 @@ class AuthService {
             emailConstants[EmailEnum.RECOVERY],
             { url },
         );
+    }
+
+    public async recoveryPassword(token: string, password: string): Promise<IUser> {
+        const { userId } = tokenService.verifyToken(token, ActionTokenTypeEnum.RECOVERY);
+        const hashedPassword = await passwordService.hashedPassword(password);
+        return await userService.updateById(userId, { password: hashedPassword });
+
     }
 }
 
