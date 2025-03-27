@@ -61,6 +61,21 @@ class AuthController {
             next(e);
         }
     }
+
+    public async recoveryRequest(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { email } = req.body;
+            const user = await userService.getByEmail(email);
+            if (user) {
+                await authService.recoveryPasswordRequest(user);
+            }
+            res.status(StatusCodeEnum.OK).json({
+                details: "Check your email",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 export const authController = new AuthController();
