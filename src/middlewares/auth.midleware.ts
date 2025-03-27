@@ -1,10 +1,11 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ApiError } from "../errors/api.error";
 import { StatusCodeEnum } from "../enums/status-codes";
 import { tokenService } from "../services/token.service";
 import { IRefresh, ITokenPayload } from "../interfaces/token.interface";
 import { RoleEnum } from "../enums/role.enum";
 import { userService } from "../services/user.service";
+import { TokenTypeEnum } from "../enums/token-type.enum";
 
 class AuthMiddleware {
     public async checkAccessToken(
@@ -25,8 +26,8 @@ class AuthMiddleware {
                 throw new ApiError("No access token provided", StatusCodeEnum.UNAUTHORIZED);
             }
 
-            const tokenPayload = tokenService.verifyToken(accessToken, "access");
-            const isTokenExists = await tokenService.isTokenExists(accessToken, "accessToken");
+            const tokenPayload = tokenService.verifyToken(accessToken, TokenTypeEnum.ACCESS);
+            const isTokenExists = await tokenService.isTokenExists(accessToken, TokenTypeEnum.ACCESS);
 
             if (!isTokenExists) {
                 throw new ApiError("Invalid access token", StatusCodeEnum.UNAUTHORIZED);
@@ -57,8 +58,8 @@ class AuthMiddleware {
             if (!refreshToken) {
                 throw new ApiError("No refresh token provided", StatusCodeEnum.FORBIDDEN);
             }
-            const tokenPayload = tokenService.verifyToken(refreshToken, "refresh");
-            const isTokenExists = await tokenService.isTokenExists(refreshToken, "refreshToken");
+            const tokenPayload = tokenService.verifyToken(refreshToken, TokenTypeEnum.REFRESH);
+            const isTokenExists = await tokenService.isTokenExists(refreshToken, TokenTypeEnum.REFRESH);
 
             if (!isTokenExists) {
                 throw new ApiError("Invalid refresh token", StatusCodeEnum.FORBIDDEN);

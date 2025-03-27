@@ -14,6 +14,10 @@ export const emailConstants: IEmailConstants<typeof EmailEnum> = {
         subject: "Welcome",
         template: "welcome",
     },
+    [EmailEnum.ACTIVATE]: {
+        subject: "Activate account",
+        template: "activate",
+    },
 };
 
 export type {

@@ -11,6 +11,7 @@ import { IAuth } from "../interfaces/auth.interface";
 import { emailService } from "./email.service";
 import { emailConstants } from "../constants/email.constants";
 import { EmailEnum } from "../enums/email.enum";
+import { ActionTokenTypeEnum } from "../enums/action-token-type.enum";
 
 class AuthService {
     public async signUp(user: IUserCreateDTO): Promise<{ user: IUser, tokens: ITokenPair }> {
@@ -22,10 +23,14 @@ class AuthService {
             role: newUser.role,
         });
         await tokenRepository.create({ ...tokens, _userId: newUser._id });
+        const token = tokenService.generateActionToken({
+            userId: newUser._id,
+            role: newUser.role,
+        }, ActionTokenTypeEnum.ACTIVATE);
         await emailService.sendEmail(
             newUser.email,
-            emailConstants[EmailEnum.WELCOME],
-            { name: newUser.name },
+            emailConstants[EmailEnum.ACTIVATE],
+            { name: newUser.name, url: `$\{config.FRONTEND_URL}/activate/${token}` },
         );
         return { user: newUser, tokens };
     }
