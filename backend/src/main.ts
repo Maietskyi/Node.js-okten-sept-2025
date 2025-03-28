@@ -14,6 +14,7 @@ const dbConnection = async (): Promise<void> => {
     let dbCon = false;
     while (!dbCon) {
         try {
+            console.log(config.MONGODB_URI, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             console.log("Connecting to DB...");
             await mongoose.connect(config.MONGODB_URI);
             dbCon = true;

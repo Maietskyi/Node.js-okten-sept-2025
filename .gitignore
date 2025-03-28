@@ -1,4 +1,5 @@
 .idea
 dist
 node_modules
+mongo_db
 #.env // також не заливати на гіт
