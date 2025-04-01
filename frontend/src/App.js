@@ -5,11 +5,12 @@ const App = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        // axios.get();
+        axios.get('/api/users').then(({data})=>setUsers(data));
     }, []);
     return (
         <div>
-            App
+            <h1>Users:...</h1>
+            {users.map(user => <div key={user._id}>{JSON.stringify(user)}</div> )}
         </div>
     );
 };
