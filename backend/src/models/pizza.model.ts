@@ -3,9 +3,9 @@ import { IPizza } from "../interfaces/pizza.interface";
 
 const pizzaSchema = new Schema(
     {
-        name: { type: String, require: true },
-        price: { type: Number, require: true },
-        diameter: { type: Number, require: true },
+        name: { type: String, required: true },
+        price: { type: Number, required: true },
+        diameter: { type: Number, required: true },
     },
     { timestamps: true, versionKey: false },
 );
