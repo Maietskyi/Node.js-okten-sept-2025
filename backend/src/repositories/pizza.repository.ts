@@ -1,4 +1,4 @@
-import { IPizza } from "../interfaces/pizza.interface";
+import { IPizza, IPizzaCreateDTO } from "../interfaces/pizza.interface";
 import { Pizza } from "../models/pizza.model";
 
 class PizzaRepository {
@@ -6,7 +6,7 @@ class PizzaRepository {
         return Pizza.find();
     }
 
-    public create(pizza: IPizza): Promise<IPizza> {
+    public create(pizza: IPizzaCreateDTO): Promise<IPizza> {
         return Pizza.create(pizza);
     }
 }
