@@ -25,6 +25,8 @@ class TokenService {
         token: string,
         type: TokenTypeEnum | ActionTokenTypeEnum,
     ): ITokenPayload {
+        console.log(type, "sssssssssssssssssssssssssssss");
+
         try {
             let secret: string;
 
