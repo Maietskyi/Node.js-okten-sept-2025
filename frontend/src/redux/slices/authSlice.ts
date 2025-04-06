@@ -1,53 +1,54 @@
-import { createAsyncThunk, createSlice, isFulfilled, isRejected } from "@reduxjs/toolkit";
-import { IUser } from "../../interfaces/userInterface";
-import { IAuth } from "../../interfaces/authInterface";
+import {createAsyncThunk, createSlice, isFulfilled, isRejected} from "@reduxjs/toolkit";
+import {IUser} from "../../interfaces/userInterface";
+import {IAuth} from "../../interfaces/authInterface";
 import { authService } from "../../services/authService";
 
 interface IState {
-    me: IUser;
-    error: boolean;
+    me: IUser,
+    error: boolean
 }
 
 const initialState: IState = {
     me: null,
-    error: null,
-};
+    error: null
+}
 
 const login = createAsyncThunk<IUser, { user: IAuth }>(
-    "authSlice/login",
-    async ({ user }, { rejectWithValue }) => {
+    'authSlice/login',
+    async ({user}, {rejectWithValue}) => {
         try {
-            return await authService.login(user);
+            return await authService.login(user)
         } catch (e) {
-            return rejectWithValue(e);
+            return rejectWithValue(e)
         }
-    },
-);
+
+    }
+)
 const authSlice = createSlice({
-    name: "authSlice",
+    name: 'authSlice',
     initialState,
     reducers: {},
     extraReducers: builder =>
         builder
             .addCase(login.fulfilled, (state, action) => {
-                state.me = action.payload;
+                state.me = action.payload
             })
             .addMatcher(isRejected(login), state => {
-                state.error = true;
+                state.error = true
             })
             .addMatcher(isFulfilled(login), state => {
-                state.error = false;
-            }),
+                state.error = false
+            })
 });
 
-const { reducer: authReduser, actions } = authSlice;
+const {reducer: authReducer, actions} = authSlice;
 
 const authActions = {
     ...actions,
-    login,
-};
+    login
+}
 
 export {
-    authActions,
-    authReduser,
-};
+    authReducer,
+    authActions
+}

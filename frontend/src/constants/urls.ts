@@ -1,15 +1,15 @@
-const auth = "/auth";
-const pizzas = "/pizzas";
+const auth = '/auth'
+const pizzas = '/pizzas'
 
 const urls = {
     auth: {
-        login: `${auth}/sing-in`,
-        reqister: `${auth}/sing-up`,
+        login: `${auth}/sign-in`,
+        register: `${auth}/sign-up`,
         refresh: `${auth}/refresh`,
-        me: `${auth}/me`,
+        me: `${auth}/me`
     },
-    pizzas,
-};
+    pizzas
+}
 
 export {
     urls
