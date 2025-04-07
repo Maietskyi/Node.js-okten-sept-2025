@@ -16,6 +16,9 @@ apiService.interceptors.request.use(req => {
 });
 
 let isRefreshing = false;
+type IWaitList = () => void
+const waitList: IWaitList[] = [];
+
 
 apiService.interceptors.response.use(res => {
         return res;
@@ -29,6 +32,7 @@ apiService.interceptors.response.use(res => {
 
                 try {
                     await authService.refresh();
+                    runAfterRefresh();
                     isRefreshing = false;
                     return apiService(originalRequest);
                 } catch (e) {
@@ -43,10 +47,28 @@ apiService.interceptors.response.use(res => {
             if (originalRequest.url === urls.auth.refresh) {
                 return Promise.reject(error);
             }
+
+            return new Promise(resolve => {
+                subscribeToWaitList(() => {
+                    resolve(apiService(originalRequest));
+                });
+            });
         }
         return Promise.reject(error);
     },
 );
+
+const subscribeToWaitList = (cb: IWaitList): void => {
+    waitList.push(cb);
+
+};
+
+const runAfterRefresh = (): void => {
+    while (waitList.length) {
+        const cd = waitList.pop();
+        cd();
+    }
+};
 
 export {
     apiService,

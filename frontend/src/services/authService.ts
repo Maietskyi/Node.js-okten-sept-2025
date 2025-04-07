@@ -34,8 +34,8 @@ const authService = {
     },
 
     deleteToken(): void {
-        localStorage.getItem(_accessToken);
-        localStorage.getItem(_refreshToken);
+        localStorage.removeItem(_accessToken);
+        localStorage.removeItem(_refreshToken);
     },
 
     me(): IRes<IUser> {

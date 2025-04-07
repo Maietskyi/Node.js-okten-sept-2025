@@ -4,10 +4,12 @@ import { pizzaService } from "../../services/pizzaService";
 
 interface IState {
     pizzas: IPizza[];
+    trigger: boolean;
 }
 
 const initialState: IState = {
     pizzas: [],
+    trigger: null,
 };
 
 const getAll = createAsyncThunk<IPizza[], void>(
@@ -21,7 +23,17 @@ const getAll = createAsyncThunk<IPizza[], void>(
         }
     },
 );
-
+const create = createAsyncThunk<IPizza, { pizza: IPizza }>(
+    "pizzaSlice/create",
+    async ({ pizza }, { rejectWithValue }) => {
+        try {
+            const { data } = await pizzaService.create(pizza);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e);
+        }
+    },
+);
 const pizzaSlice = createSlice({
     name: "pizzaSlice",
     initialState,
@@ -30,7 +42,11 @@ const pizzaSlice = createSlice({
         builder
             .addCase(getAll.fulfilled, (state, action) => {
                 state.pizzas = action.payload;
+            })
+            .addCase(create.fulfilled, (state, action) => {
+                state.trigger = !state.trigger;
             }),
+
 });
 
 const { reducer: pizzaReducer, actions } = pizzaSlice;
@@ -38,9 +54,10 @@ const { reducer: pizzaReducer, actions } = pizzaSlice;
 const pizzaActions = {
     ...actions,
     getAll,
+    create,
 };
 
 export {
-    pizzaSlice,
+    pizzaReducer,
     pizzaActions,
 };
