@@ -6,6 +6,7 @@ import cors from "cors";
 import { config } from "./configs/config";
 import { apiRouter } from "./routers/api.router";
 import { ApiError } from "./errors/api.error";
+import path from "node:path";
 
 const app = express();
 app.use(express.json());
@@ -16,13 +17,15 @@ app.use(cors({
     ],
 }));
 
+app.use("/media", express.static(path.join(process.cwd(), "upload")));
+
 app.use("/", apiRouter);
 
 app.use(
     "*",
     (err: ApiError, req: Request, res: Response, next: NextFunction) => {
         const status = err.status || 500;
-        const message = err.message ?? "Server Error";
+        const message = err.message ?? "Server Error, Something went wrong";
         res.status(status).json({ status, message });
     },
 );
