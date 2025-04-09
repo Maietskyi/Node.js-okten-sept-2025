@@ -91,10 +91,10 @@ class UserController {
             if (!user) {
                 throw new ApiError("User not found", StatusCodeEnum.BED_REQUEST);
             }
-            console.log(req.file.path, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-            if (!req.files) {
+            if (!req.file) {
                 throw new ApiError("No file upload", StatusCodeEnum.BED_REQUEST);
             }
+            console.log(req.file.path, '2222222222222222222222222222');
 
             const data = await userService.updateById(id, { avatar: req.file.path });
             res.status(StatusCodeEnum.OK).json(data);
