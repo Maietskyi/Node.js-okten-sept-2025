@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import express, { Request, Response, NextFunction } from "express";
 import * as mongoose from "mongoose";
+import cors from "cors";
 import { config } from "./configs/config";
 import { apiRouter } from "./routers/api.router";
 import { ApiError } from "./errors/api.error";
@@ -9,6 +10,9 @@ import { ApiError } from "./errors/api.error";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({origin: [
+    'http://localhost:3000',
+    ]}));
 
 const dbConnection = async (): Promise<void> => {
     let dbCon = false;
