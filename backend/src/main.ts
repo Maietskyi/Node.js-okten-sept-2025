@@ -10,9 +10,27 @@ import { ApiError } from "./errors/api.error";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({origin: [
-    'http://localhost:3000',
-    ]}));
+app.use(cors({
+    origin: [
+        "http://localhost:3000",
+    ],
+}));
+
+app.use("/", apiRouter);
+
+app.use(
+    "*",
+    (err: ApiError, req: Request, res: Response, next: NextFunction) => {
+        const status = err.status || 500;
+        const message = err.message ?? "Server Error";
+        res.status(status).json({ status, message });
+    },
+);
+
+process.on("uncaughtException", (err) => {
+    console.error("uncaughtException", err);
+    process.exit(1);
+});
 
 const dbConnection = async (): Promise<void> => {
     let dbCon = false;
@@ -31,20 +49,6 @@ const dbConnection = async (): Promise<void> => {
     }
 };
 
-app.use("/", apiRouter);
-
-app.use(
-    "*",
-    (err: ApiError, req: Request, res: Response, next: NextFunction) => {
-        const status = err.status || 500;
-        const message = err.message ?? "Server Error";
-        res.status(status).json({ status, message });
-    },
-);
-process.on("uncaughtException", (err) => {
-    console.error("uncaughtException", err);
-    process.exit(1);
-});
 const start = async (): Promise<void> => {
     try {
         await dbConnection();

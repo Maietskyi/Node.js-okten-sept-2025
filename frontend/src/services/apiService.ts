@@ -36,7 +36,7 @@ apiService.interceptors.response.use(res => {
                     isRefreshing = false;
                     return apiService(originalRequest);
                 } catch (e) {
-                    authService.deleteToken();
+                    authService.deleteTokens();
                     isRefreshing = false;
 
                     await router.navigate("/login?sessionExpired=true");
