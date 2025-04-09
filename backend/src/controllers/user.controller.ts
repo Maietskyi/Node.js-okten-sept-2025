@@ -85,18 +85,9 @@ class UserController {
 
     public async uploadAvatar(req: Request, res: Response, next: NextFunction) {
         try {
-            const { id } = req.params;
-            const user = await userService.getById(id);
 
-            if (!user) {
-                throw new ApiError("User not found", StatusCodeEnum.BED_REQUEST);
-            }
-            if (!req.file) {
-                throw new ApiError("No file upload", StatusCodeEnum.BED_REQUEST);
-            }
-            console.log(req.file.path, '2222222222222222222222222222');
-
-            const data = await userService.updateById(id, { avatar: req.file.path });
+            const { userId } = req.res.locals.tokenPayload as ITokenPayload;
+            const data = await userService.updateById(userId, { avatar: req.file.path });
             res.status(StatusCodeEnum.OK).json(data);
 
         } catch (e) {

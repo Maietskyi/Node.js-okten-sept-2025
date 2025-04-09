@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { isObjectIdOrHexString } from "mongoose";
 import { ApiError } from "../errors/api.error";
 import { ObjectSchema } from "joi";
+import { StatusCodeEnum } from "../enums/status-codes";
 
 class CommonMiddleware {
     public isIdValidate(key: string) {
@@ -22,10 +23,24 @@ class CommonMiddleware {
         return async (req: Request, res: Response, next: NextFunction) => {
             try {
                 req.body = await validator.validateAsync(req.body);
-                next()
+                next();
             } catch (e) {
                 const errorMessage = e.details?.[0]?.message || "Validation error";
                 next(new ApiError(errorMessage, 400));
+            }
+        };
+    }
+
+    public isFileExists() {
+        return async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                console.log(req.file, "!!!!!!!!!!!!!!!!!!1");
+                if (!req.file) {
+                    throw new ApiError("No file upload", StatusCodeEnum.BED_REQUEST);
+                }
+                next();
+            } catch (e) {
+                next(e);
             }
         };
     }
