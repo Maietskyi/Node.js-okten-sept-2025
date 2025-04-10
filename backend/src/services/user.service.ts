@@ -15,10 +15,7 @@ class UserService {
             data = [];
             totalItems = 0;
         }
-        console.log(totalItems);
-        // const totalItems = data.length;
         const totalPages = Math.ceil(totalItems / query.pageSize);
-        console.log(totalPages);
         return {
             totalItems,
             totalPages,
