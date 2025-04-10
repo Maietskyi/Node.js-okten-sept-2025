@@ -14,8 +14,7 @@ class CommonMiddleware {
                 }
                 next();
             } catch (e) {
-                next(new ApiError(e.deletes[0].message, 400));
-            }
+                next(e);            }
         };
     }
 

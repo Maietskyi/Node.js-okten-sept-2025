@@ -13,15 +13,26 @@ class UserRepository {
                 { surname: { $regex: query.search, $options: "i" } },
             ];
         }
+        const orderObject = {};
+        if (query.order) {
+            if (query.order.startsWith("-")) {
+                orderObject[query.order.slice(1)] = -1;
+            } else {
+                orderObject[query.order] = 1;
+            }
+        }
         // User.find(filterObject).limit(query.pageSize).skip(skip);
         return User.aggregate([
             {
                 $match: filterObject,
             },
+            // {
+            //     $sort: orderObject,
+            // },
             {
                 $group: {
                     _id: null,
-                    total: { $sum: 1 },
+                    totalItems: { $sum: 1 },
                     data: { $push: "$$ROOT" },
                 },
             },
