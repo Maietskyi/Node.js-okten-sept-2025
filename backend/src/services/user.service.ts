@@ -2,10 +2,19 @@ import { IUser, IUserCreateDTO, IUserQuery } from "../interfaces/user.interface"
 import { userRepository } from "../repositories/user.repository";
 import { ApiError } from "../errors/api.error";
 import { StatusCodeEnum } from "../enums/status-codes";
+import { IPaginationResponse } from "../interfaces/paginated-response-interface";
 
 class UserService {
-    public getAll(query: IUserQuery): Promise<IUser[]> {
-        return userRepository.getAll(query);
+    public async getAll(query: IUserQuery): Promise<IPaginationResponse<IUser>> {
+        const [data, totalItems] = await userRepository.getAll(query);
+        const totalPages = Math.ceil(totalItems / query.pageSize);
+        return {
+            totalItems,
+            totalPages,
+            prevPage: !!(query.page - 1),
+            nextPage: query.page + 1 <= totalPages,
+            data,
+        };
     }
 
     public create(user: IUserCreateDTO): Promise<IUser> {
