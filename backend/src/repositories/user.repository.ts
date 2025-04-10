@@ -1,13 +1,21 @@
 import { IUser, IUserCreateDTO, IUserQuery } from "../interfaces/user.interface";
 import { User } from "../models/user.model";
-
-// import { FilterQuery } from "mongoose";
+import { FilterQuery } from "mongoose";
 
 class UserRepository {
     public getAll(query: IUserQuery): Promise<[IUser[], number]> {
         const skip = query.pageSize * (query.page - 1);
+        const filterObject: FilterQuery<IUser> = { isDeleted: false };
+
+        if (query.search) {
+            filterObject.$or = [
+                { name: { $regex: query.search, $options: "i" } },
+                { surname: { $regex: query.search, $options: "i" } },
+            ];
+        }
+
         return Promise.all([
-            User.find().limit(query.pageSize).skip(skip),
+            User.find(filterObject).limit(query.pageSize).skip(skip),
             User.countDocuments(),
         ]);
 
