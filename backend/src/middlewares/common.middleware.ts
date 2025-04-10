@@ -6,15 +6,16 @@ import { StatusCodeEnum } from "../enums/status-codes";
 
 class CommonMiddleware {
     public isIdValidate(key: string) {
-        return (req: Request, res: Response, next: NextFunction): any => {
+        return (req: Request, res: Response, next: NextFunction) => {
             try {
                 const id = req.params[key];
                 if (!isObjectIdOrHexString(id)) {
-                    throw new ApiError(`${key}: ${id} invalid id`, 400);
+                    throw new ApiError(`${key}: ${id} invalid Id`, 400);
                 }
                 next();
             } catch (e) {
-                next(e);            }
+                next(e);
+            }
         };
     }
 
@@ -43,7 +44,7 @@ class CommonMiddleware {
         };
     }
 
-    public query(validator: ObjectSchema): any {
+    public query(validator: ObjectSchema) {
         return async (req: Request, res: Response, next: NextFunction) => {
             try {
                 req.query = await validator.validateAsync(req.query);

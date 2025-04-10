@@ -27,9 +27,11 @@ export class UserValidator {
         pageSize: joi.number().min(1).max(100).default(10),
         page: joi.number().min(1).default(1),
         search: joi.string().trim(),
-        orderBy: joi.string().valid(
-            ...Object.values(UserQueryOrderEnum),
-            ...Object.values(UserQueryOrderEnum)
-                .map(item => `-${item}`)),
+        order: joi
+            .string()
+            .valid(
+                ...Object.values(UserQueryOrderEnum),
+                ...Object.values(UserQueryOrderEnum).map((item) => `-${item}`),
+            ),
     });
 }

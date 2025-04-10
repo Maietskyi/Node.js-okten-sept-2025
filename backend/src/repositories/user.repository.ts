@@ -26,9 +26,9 @@ class UserRepository {
             {
                 $match: filterObject,
             },
-            // {
-            //     $sort: orderObject,
-            // },
+            {
+                $sort: orderObject,
+            },
             {
                 $group: {
                     _id: null,
