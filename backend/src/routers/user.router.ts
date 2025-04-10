@@ -7,7 +7,10 @@ import { authMiddleware } from "../middlewares/auth.midleware";
 
 const router = Router();
 
-router.get("/", userController.getAll);
+router.get(
+    "/",
+    commonMiddleware.query(UserValidator.query),
+    userController.getAll);
 
 router.get(
     "/:id",

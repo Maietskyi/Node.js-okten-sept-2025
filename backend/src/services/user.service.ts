@@ -1,11 +1,11 @@
-import { IUser, IUserCreateDTO } from "../interfaces/user.interface";
+import { IUser, IUserCreateDTO, IUserQuery } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
 import { ApiError } from "../errors/api.error";
 import { StatusCodeEnum } from "../enums/status-codes";
 
 class UserService {
-    public getAll(): Promise<IUser[]> {
-        return userRepository.getAll();
+    public getAll(query: IUserQuery): Promise<IUser[]> {
+        return userRepository.getAll(query);
     }
 
     public create(user: IUserCreateDTO): Promise<IUser> {

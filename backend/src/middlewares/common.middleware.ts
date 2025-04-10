@@ -34,13 +34,23 @@ class CommonMiddleware {
     public isFileExists() {
         return async (req: Request, res: Response, next: NextFunction) => {
             try {
-                console.log(req.file, "!!!!!!!!!!!!!!!!!!1");
                 if (!req.file) {
                     throw new ApiError("No file upload", StatusCodeEnum.BED_REQUEST);
                 }
                 next();
             } catch (e) {
                 next(e);
+            }
+        };
+    }
+
+    public query(validator: ObjectSchema): any {
+        return async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                req.query = await validator.validateAsync(req.query);
+                next();
+            } catch (e) {
+                next(new ApiError(e.details?.[0]?.message, 400));
             }
         };
     }
