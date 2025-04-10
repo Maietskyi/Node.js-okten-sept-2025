@@ -6,7 +6,16 @@ import { IPaginationResponse } from "../interfaces/paginated-response-interface"
 
 class UserService {
     public async getAll(query: IUserQuery): Promise<IPaginationResponse<IUser>> {
-        const [data, totalItems] = await userRepository.getAll(query);
+        const dataFromDb = await userRepository.getAll(query);
+        let data, totalItems;
+        if (dataFromDb.length) {
+            data = dataFromDb[0].data;
+            totalItems = dataFromDb[0].totalItems;
+        } else {
+            data = [];
+            totalItems = 0;
+        }
+        // const totalItems = data.length;
         const totalPages = Math.ceil(totalItems / query.pageSize);
         return {
             totalItems,
