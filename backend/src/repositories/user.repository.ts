@@ -13,16 +13,9 @@ class UserRepository {
                 { surname: { $regex: query.search, $options: "i" } },
             ];
         }
-        const orderObject = {};
-        if (query.order) {
-            if (query.order.startsWith("-")) {
-                orderObject[query.order.slice(1)] = -1;
-            } else {
-                orderObject[query.order] = 1;
-            }
-        }
+
         return Promise.all([
-            User.find(filterObject).limit(query.pageSize).skip(skip),
+            User.find(filterObject).limit(query.pageSize).skip(skip).sort(query.order),
             User.find(filterObject).countDocuments(),
 
         ]);

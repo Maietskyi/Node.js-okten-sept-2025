@@ -19,16 +19,8 @@ class PizzaRepository {
             filterObject.diameter = query.diameter;
         }
 
-        const orderObject = {};
-        if (query.order) {
-            if (query.order.startsWith("-")) {
-                orderObject[query.order.slice(1)] = -1;
-            } else {
-                orderObject[query.order] = 1;
-            }
-        }
         return Promise.all([
-            Pizza.find(filterObject).limit(query.pageSize).skip(skip),
+            Pizza.find(filterObject).limit(query.pageSize).skip(skip).sort(query.order),
             Pizza.find(filterObject).countDocuments(),
 
         ]);
