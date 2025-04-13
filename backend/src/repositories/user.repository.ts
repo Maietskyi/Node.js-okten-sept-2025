@@ -26,7 +26,6 @@ class UserRepository {
             User.find(filterObject).countDocuments(),
 
         ]);
-
     }
 
     public create(user: IUserCreateDTO): Promise<IUser> {
