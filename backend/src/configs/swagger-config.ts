@@ -10,7 +10,7 @@ const swaggerDocument: OpenAPIV3.Document = {
     },
     servers: [
         {
-            url: "https://localhost:5555",
+            url: "http://localhost:5555",
             description: "Local server",
         },
     ],
@@ -24,8 +24,160 @@ const swaggerDocument: OpenAPIV3.Document = {
             description: "Pizza endpoints",
         },
     ],
-    paths: {},
+    paths: {
+        "/auth/sign-up": {
+            post: {
+                tags: ["Auth"],
+                summary: "Register new user",
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    email: { type: "string", format: "email" },
+                                    password: { type: "string", format: "password" },
+                                    name: { type: "string" },
+                                    surname: { type: "string" },
+                                    age: { type: "integer" },
+                                },
+                                required: [
+                                    "email",
+                                    "password",
+                                    "name",
+                                    "surname",
+                                    "age",
+                                ],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "201": {
+                        description: "User successfully registered",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        user: {
+                                            type: "object",
+                                            properties: {
+                                                email: { type: "string" },
+                                                role: { type: "string" },
+                                                name: { type: "string" },
+                                                surname: { type: "string" },
+                                                age: { type: "integer" },
+                                                avatar: { type: "string" },
+                                                isActive: { type: "boolean" },
+                                                isDeleted: { type: "boolean" },
+                                                isVerified: { type: "boolean" },
+                                                _id: { type: "string" },
+                                                createdAt: { type: "string" },
+                                                updatedAt: { type: "string" },
+                                            },
+                                        },
+                                        tokens: {
+                                            type: "object",
+                                            properties: {
+                                                accessToken: { type: "string" },
+                                                refreshToken: { type: "string" },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "400": {
+                        description: "Bad request",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: { type: "string", default: 400 },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/auth/sign-in": {
+            post: {
+                tags: ["Auth"],
+                summary: "Login user",
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    email: { type: "string", format: "email" },
+                                    password: { type: "string", format: "password" },
+                                },
+                                required: ["email", "password"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "User successfully logged in",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        user: {
+                                            type: "object",
+                                            properties: {
+                                                email: { type: "string" },
+                                                role: { type: "string" },
+                                                name: { type: "string" },
+                                                surname: { type: "string" },
+                                                age: { type: "integer" },
+                                                avatar: { type: "string" },
+                                                isActive: { type: "boolean" },
+                                                isDeleted: { type: "boolean" },
+                                                isVerified: { type: "boolean" },
+                                                _id: { type: "string" },
+                                                createdAt: { type: "string" },
+                                                updatedAt: { type: "string" },
+                                            },
+                                        },
+                                        tokens: {
+                                            type: "object",
+                                            properties: {
+                                                accessToken: { type: "string" },
+                                                refreshToken: { type: "string" },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+                bearerFormat: "JWT",
+            },
+        },
+    },
 };
+
 
 export {
     swaggerDocument,
