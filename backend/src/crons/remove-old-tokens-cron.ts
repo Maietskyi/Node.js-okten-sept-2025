@@ -1,7 +1,8 @@
+import { CronJob } from "cron";
+
 import { config } from "../configs/config";
 import { timeHelper } from "../helpers/time.helper";
 import { tokenRepository } from "../repositories/token.repository";
-import { CronJob } from "cron";
 
 const handler = async () => {
     try {
@@ -11,11 +12,11 @@ const handler = async () => {
         const count = await tokenRepository.deleteBeforeDate(date);
 
         if (count) {
-            console.log(`Deleted ${count} old tokens`);
+            console.log(`deleted ${count} old tokens`);
         }
-    } catch (err) {
-        console.error("e.message");
+    } catch (e) {
+        console.error(e.message);
     }
 };
 
-export const removeOldTokens = new CronJob("0 * * * * *", handler);
+export const removeOldTokensCron = new CronJob("0 * * * * *", handler);

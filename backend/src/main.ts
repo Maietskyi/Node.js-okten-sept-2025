@@ -8,6 +8,7 @@ import { apiRouter } from "./routers/api.router";
 import { ApiError } from "./errors/api.error";
 import path from "node:path";
 import { cronRunner } from "./crons";
+import { swaggerDocument, swaggerUI } from "./configs/swagger-config";
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,8 @@ app.use(cors({
 }));
 
 app.use("/media", express.static(path.join(process.cwd(), "upload")));
+
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use("/", apiRouter);
 
