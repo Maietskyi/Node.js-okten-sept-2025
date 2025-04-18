@@ -234,7 +234,7 @@ const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
-        "/users": {
+        "/users/{userId}": {
             get: {
                 tags: ["Users"],
                 summary: "Get user by id",
