@@ -23,6 +23,10 @@ const swaggerDocument: OpenAPIV3.Document = {
             name: "Pizza",
             description: "Pizza endpoints",
         },
+        {
+            name: "Users",
+            description: "Users endpoints",
+        },
     ],
     paths: {
         "/auth/sign-up": {
@@ -222,6 +226,48 @@ const swaggerDocument: OpenAPIV3.Document = {
                                                 },
                                             },
                                         },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/users": {
+            get: {
+                tags: ["Users"],
+                summary: "Get user by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "userId",
+                        in: "path",
+                        description: "Get user by id",
+                        required: true,
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Successfully get user by id",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        email: { type: "string" },
+                                        role: { type: "string" },
+                                        name: { type: "string" },
+                                        surname: { type: "string" },
+                                        age: { type: "integer" },
+                                        avatar: { type: "string" },
+                                        isActive: { type: "boolean" },
+                                        isDeleted: { type: "boolean" },
+                                        isVerified: { type: "boolean" },
+                                        _id: { type: "string" },
+                                        createdAt: { type: "string" },
+                                        updatedAt: { type: "string" },
                                     },
                                 },
                             },
