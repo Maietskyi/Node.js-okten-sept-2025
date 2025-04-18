@@ -166,6 +166,70 @@ const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
+        "/pizzas": {
+            get: {
+                tags: ["Pizza"],
+                summary: "Get all pizzas with pagination and filters",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "pageSize",
+                        in: "query",
+                        description: "Number of items per page",
+                        schema: { type: "integer", default: 10 },
+                    },
+                    {
+                        name: "page",
+                        in: "query",
+                        required: true,
+                        description: "Page number",
+                        schema: { type: "integer", default: 1 },
+                    },
+                    {
+                        name: "price",
+                        in: "query",
+                        description: "Filter by price",
+                        schema: { type: "integer" },
+                    },
+                    {
+                        name: "diameter",
+                        in: "query",
+                        description: "Filter by diameter",
+                        schema: { type: "integer" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "List of pizzas with pagination",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        totalItems: { type: "integer" },
+                                        totalPages: { type: "integer" },
+                                        prevPages: { type: "boolean" },
+                                        nextPages: { type: "boolean" },
+                                        data: {
+                                            type: "array",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: { type: "string" },
+                                                    name: { type: "string" },
+                                                    price: { type: "integer" },
+                                                    diameter: { type: "integer" },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
     },
     components: {
         securitySchemes: {
